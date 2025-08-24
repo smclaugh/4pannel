@@ -1,0 +1,24 @@
+{
+  "name": "4pannel-service",
+  "version": "1.0.0",
+  "description": "Service to generate 4-panel visual representations of words",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@anthropic-ai/sdk": "^0.24.3",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.8.0",
+    "@types/cors": "^2.8.17",
+    "typescript": "^5.9.2",
+    "ts-node": "^10.9.1"
+  }
+}

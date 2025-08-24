@@ -1,0 +1,30 @@
+I want to generate a service written in TypeScript. The service should provide a rest interface with a single API: /api/v1/make4pannel?word=
+
+The argument to this API will be a string repesenting a word in some spoken human language.
+
+The service will generate a 4pannel representation of the word.
+
+Let me explain what a 4pannel representation is by way of an example.
+
+Suppose that I wanted to teach you the word 'marngle' by showing you 4 different pictures of it in a 2x2 configuration.
+
+Each picture will show marngle in a different setting. Thus, you, the viewer should be able to factor out the essentialy meaning that is shared among the four pannels.
+
+In the case of marngle, I would show you the following four pannels:
+
+1. A lake in the morning with a misty vapour wafting off of it.
+2. A tea kettle blowing a hazy vapor from the spout.
+3. A hot shower making mirrors foggy looking.
+4. Freshly cooked dumplings and vegetables with steaming on a plate.
+
+From these four pannels, you would likely gather that marngle is steam or some kind of hot water vapor. It is never spelled out explictly, but it is enough related examples to help make a strong association in your mind.
+
+So, our goal is to generate these 4pannel representations for the word provided to the API.
+
+We will achieve this in a two-step process.
+
+Step 1. Use a template similar to the description of marngle above to instruct the Anthropic LLM, Claude, to generate an image prompt describing each of the four pannels to a good level of detail. The prompt should create four separate environments in which the only commonality is word provided from the API. For the call to Anthropic, please use claude-opus-4-20250514.
+
+Step 2. Send the image prompt from Claude to the Gemini image generation API. Specifically, you can use generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key={api_key}.
+
+Finally, please extract the image data from the result JSON at response_data['predictions'][0]['bytesBase64Encoded'], save it as a PNG and return it to the user.

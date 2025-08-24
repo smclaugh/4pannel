@@ -3,6 +3,7 @@ import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import { generateFourPanel } from './fourPanelService';
 import { logger, createSessionLogger } from './logger';
+import { wordValidator } from './wordValidator';
 
 require('dotenv').config();
 
@@ -17,7 +18,7 @@ app.get('/api/v1/make4pannel', async (req: Request, res: Response) => {
   const sessionId = uuidv4();
   const sessionLogger = createSessionLogger(sessionId);
   const startTime = Date.now();
-  
+
   sessionLogger.info('Received request for 4-panel generation', {
     timestamp: new Date().toISOString(),
     endpoint: '/api/v1/make4pannel'
@@ -33,6 +34,17 @@ app.get('/api/v1/make4pannel', async (req: Request, res: Response) => {
         wordType: typeof word
       });
       return res.status(400).json({ error: 'Word parameter is required' });
+    }
+
+    // Validate that the word is a valid English word
+    if (!wordValidator.isValidWord(word)) {
+      sessionLogger.warn('Invalid word rejected by validation', {
+        word,
+        reason: 'Word not found in English dictionary or contains invalid characters'
+      });
+      return res.status(400).json({
+        error: 'Invalid word. Please provide a single valid English word.'
+      });
     }
 
     sessionLogger.info('Processing 4-panel generation request', { word });

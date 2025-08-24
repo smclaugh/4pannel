@@ -148,6 +148,10 @@
                 const response = await fetch(`/api/v1/make4pannel?word=${encodeURIComponent(word)}`);
                 
                 if (!response.ok) {
+                    if (response.status === 400) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Invalid input');
+                    }
                     throw new Error(`Server error: ${response.status}`);
                 }
                 

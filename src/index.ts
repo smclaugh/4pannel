@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { generateFourPanel } from './fourPanelService';
 
+require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,13 +13,13 @@ app.use(express.json());
 app.get('/api/v1/make4pannel', async (req: Request, res: Response) => {
   try {
     const { word } = req.query;
-    
+
     if (!word || typeof word !== 'string') {
       return res.status(400).json({ error: 'Word parameter is required' });
     }
 
     const imageData = await generateFourPanel(word);
-    
+
     res.setHeader('Content-Type', 'image/png');
     res.send(imageData);
   } catch (error) {

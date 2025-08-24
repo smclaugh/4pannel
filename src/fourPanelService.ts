@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import axios from 'axios';
 
 const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  apiKey: process.env.ANTHROPIC_API_KEY
 });
 
 interface GeminiResponse {
@@ -29,7 +29,8 @@ Similar to how I might teach the word 'marngle' (meaning steam or hot water vapo
 Please create four detailed scene descriptions for "${word}" that would help viewers understand its meaning through visual context. Each scene should show the concept in a different setting, allowing the viewer to identify the common element.
 
 Format your response as a single detailed image prompt that describes a 2x2 grid layout with four panels, each showing one of your scenes. Make the descriptions vivid and specific enough for image generation.`;
-
+  // TODO(s.mclaughlin): Why is this line necessary?
+  anthropic.apiKey = process.env.ANTHROPIC_API_KEY as string
   const message = await anthropic.messages.create({
     model: 'claude-opus-4-20250514',
     max_tokens: 1024,
@@ -67,7 +68,7 @@ async function generateImage(prompt: string): Promise<Buffer> {
   );
 
   const data: GeminiResponse = response.data;
-  
+
   if (!data.predictions || !data.predictions[0] || !data.predictions[0].bytesBase64Encoded) {
     throw new Error('Invalid response from Gemini API');
   }

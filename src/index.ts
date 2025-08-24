@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 app.get('/api/v1/make4pannel', async (req: Request, res: Response) => {
   const sessionId = uuidv4();

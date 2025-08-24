@@ -50,8 +50,6 @@ Please create four detailed scene descriptions for "${word}" that would help vie
 
 Format your response as a single detailed image prompt that describes a 2x2 grid layout with four panels, each showing one of your scenes. Make the descriptions vivid and specific enough for image generation.
 
-Let's also make sure to keep the images G-rated. We don't want to show anybody not wearing a shirt, or showing extreme negative emotions or acting in a lude manner or violent way.
-
 Finally, please do no try to write large pieces of text onto the image. Maybe a small bit of text in one of the pannels is fine. However, don't use text from any language to describe "${word}"`;
 
   try {

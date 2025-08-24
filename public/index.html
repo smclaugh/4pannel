@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4Panel Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+        
+        .image-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .generated-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>4Panel Generator</h1>
+        
+        <div class="input-section">
+            <label for="wordInput">Enter a word to generate a 4-panel visual representation:</label>
+            <input type="text" id="wordInput" placeholder="e.g. freedom, happiness, adventure...">
+            <button id="generateBtn" onclick="generateImage()">Generate</button>
+        </div>
+        
+        <div id="loadingMessage" class="loading" style="display: none;">
+            Generating your 4-panel image... This may take a few moments.
+        </div>
+        
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        
+        <div id="imageSection" class="image-section" style="display: none;">
+            <img id="generatedImage" class="generated-image" alt="Generated 4-panel image">
+        </div>
+    </div>
+
+    <script>
+        async function generateImage() {
+            const wordInput = document.getElementById('wordInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const imageSection = document.getElementById('imageSection');
+            const generatedImage = document.getElementById('generatedImage');
+            
+            const word = wordInput.value.trim();
+            
+            if (!word) {
+                showError('Please enter a word');
+                return;
+            }
+            
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            loadingMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            imageSection.style.display = 'none';
+            
+            try {
+                const response = await fetch(`/api/v1/make4pannel?word=${encodeURIComponent(word)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                
+                generatedImage.src = imageUrl;
+                imageSection.style.display = 'block';
+                
+            } catch (error) {
+                showError(`Failed to generate image: ${error.message}`);
+            } finally {
+                // Reset UI state
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate';
+                loadingMessage.style.display = 'none';
+            }
+        }
+        
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        // Allow Enter key to trigger generation
+        document.getElementById('wordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateImage();
+            }
+        });
+    </script>
+</body>
+</html>

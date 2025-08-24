@@ -58,6 +58,14 @@ GET /api/v1/make4pannel?word=steam
 
 Returns a PNG image showing four panels that illustrate the concept of steam in different contexts.
 
+## Example
+
+Here's what happens when you request a 4-panel image for the word "leg":
+
+![Example: leg](example/leg.png)
+
+The service generates four different visual contexts showing the concept of "leg": a person's leg on a beach, a table leg, a bird's leg standing in water, and a runner's leg in motion.
+
 ## How It Works
 
 1. **Step 1**: Uses Claude (claude-opus-4-20250514) to generate detailed descriptions of four different scenes that showcase the word's meaning

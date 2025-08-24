@@ -1,5 +1,12 @@
 # 4Panel Service
 
+## TODO
+
+- Sanitize prompt injections
+- Tests
+- Frontend
+- Add an API key before the service goes live
+
 A TypeScript service that generates 4-panel visual representations of words to help illustrate their meaning through contextual examples.
 
 ## Setup
